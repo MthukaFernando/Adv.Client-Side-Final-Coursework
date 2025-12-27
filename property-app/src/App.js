@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import propertiesData from './properties.json';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Property app</h1>
+      
+      {/* Access the array inside the imported object */}
+      {propertiesData.properties.map((property) => (
+        <div key={property.id}>
+          <h2>{property.type}</h2>
+          <p>Price: {property.price}</p>
+          <p>Bedrooms: {property.bedrooms}</p>
+          <p>{property.location}</p>
+        </div>
+      ))}
+      
     </div>
   );
 }
