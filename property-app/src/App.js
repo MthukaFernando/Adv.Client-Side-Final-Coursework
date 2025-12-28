@@ -4,6 +4,8 @@ function App() {
   return (
     <div>
       <h1>Property app</h1>
+
+      <input type="text" placeholder="Search..." className="search"></input>
       
       {/* Access the array inside the imported object */}
       {propertiesData.properties.map((property) => (
