@@ -142,6 +142,8 @@ function App() {
         filteredProperties.map((property) => (
           <div key={property.id}>
             <h2>{property.type}</h2>
+
+            <img className="property-img" src={property.picture} alt={property.type}></img>
             <p>Price: {property.price}</p>
             <p>Bedrooms: {property.bedrooms}</p>
             <p>Location: {property.location}</p>
