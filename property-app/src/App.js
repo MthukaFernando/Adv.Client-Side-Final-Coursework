@@ -2,66 +2,61 @@ import React, { useState } from 'react';
 import propertiesData from './properties.json';
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");   // Search bar
-  const [queryType, setQueryType] = useState("");       // Type dropdown
-  const [minPrice, setMinPrice] = useState("");         // Min price
-  const [maxPrice, setMaxPrice] = useState("");         // Max price
-  const [minBedrooms, setMinBedrooms] = useState("");   // Min bedrooms
-  const [maxBedrooms, setMaxBedrooms] = useState("");   // Max bedrooms
-  const [dateAfter, setDateAfter] = useState("");       // Date filter (manual input)
-  const [postcode, setPostcode] = useState("");         // Postcode filter
+  // Input states (what user types/selects)
+  const [inputType, setInputType] = useState("");
+  const [inputMinPrice, setInputMinPrice] = useState("");
+  const [inputMaxPrice, setInputMaxPrice] = useState("");
+  const [inputMinBedrooms, setInputMinBedrooms] = useState("");
+  const [inputMaxBedrooms, setInputMaxBedrooms] = useState("");
+  const [inputDateAfter, setInputDateAfter] = useState("");
+  const [inputPostcode, setInputPostcode] = useState("");
+
+  // Applied states (used for filtering)
+  const [queryType, setQueryType] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [minBedrooms, setMinBedrooms] = useState("");
+  const [maxBedrooms, setMaxBedrooms] = useState("");
+  const [dateAfter, setDateAfter] = useState("");
+  const [postcode, setPostcode] = useState("");
 
   // Filter logic
   const filteredProperties = propertiesData.properties.filter((property) => {
-    // Search bar: type or location
-    const searchMatch =
-      searchQuery === "" ||
-      property.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.location.toLowerCase().includes(searchQuery.toLowerCase());
-
-    // Type dropdown filter
     const typeMatch = queryType === "" || property.type === queryType;
-
-    // Price filter
     const priceMatch =
       (minPrice === "" || property.price >= Number(minPrice)) &&
       (maxPrice === "" || property.price <= Number(maxPrice));
-
-    // Bedrooms filter
     const bedroomsMatch =
       (minBedrooms === "" || property.bedrooms >= Number(minBedrooms)) &&
       (maxBedrooms === "" || property.bedrooms <= Number(maxBedrooms));
-
-    // Date added filter (manual input)
     const dateMatch =
       dateAfter === "" ||
       new Date(`${property.added.year}-${property.added.month}-${property.added.day}`) >=
         new Date(dateAfter);
-
-    // Postcode filter
     const postcodeMatch =
       postcode === "" || property.location.toLowerCase().includes(postcode.toLowerCase());
 
-    // Must satisfy all filters
-    return searchMatch && typeMatch && priceMatch && bedroomsMatch && dateMatch && postcodeMatch;
+    return typeMatch && priceMatch && bedroomsMatch && dateMatch && postcodeMatch;
   });
+
+  // Apply filters on button click
+  const applyFilters = () => {
+    setQueryType(inputType);
+    setMinPrice(inputMinPrice);
+    setMaxPrice(inputMaxPrice);
+    setMinBedrooms(inputMinBedrooms);
+    setMaxBedrooms(inputMaxBedrooms);
+    setDateAfter(inputDateAfter);
+    setPostcode(inputPostcode);
+  };
 
   return (
     <div>
       <h1>Property App</h1>
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search type or location..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-
       {/* Filters container */}
       <div>
-        {/* Type dropdown */}
-        <select value={queryType} onChange={(e) => setQueryType(e.target.value)}>
+        <select value={inputType} onChange={(e) => setInputType(e.target.value)}>
           <option value="">All Types</option>
           <option value="House">House</option>
           <option value="Flat">Flat</option>
@@ -69,54 +64,51 @@ function App() {
           <option value="Penthouse">Penthouse</option>
         </select>
 
-        {/* Price filters */}
         <input
           type="number"
           placeholder="Min Price"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
+          value={inputMinPrice}
+          onChange={(e) => setInputMinPrice(e.target.value)}
         />
         <input
           type="number"
           placeholder="Max Price"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
+          value={inputMaxPrice}
+          onChange={(e) => setInputMaxPrice(e.target.value)}
         />
 
-        {/* Bedrooms filters */}
         <input
           type="number"
           placeholder="Min Bedrooms"
-          value={minBedrooms}
-          onChange={(e) => setMinBedrooms(e.target.value)}
+          value={inputMinBedrooms}
+          onChange={(e) => setInputMinBedrooms(e.target.value)}
         />
         <input
           type="number"
           placeholder="Max Bedrooms"
-          value={maxBedrooms}
-          onChange={(e) => setMaxBedrooms(e.target.value)}
+          value={inputMaxBedrooms}
+          onChange={(e) => setInputMaxBedrooms(e.target.value)}
         />
 
-        {/* Date added filter (manual input) */}
         <input
           type="text"
           placeholder="Date after (YYYY-MM-DD)"
-          value={dateAfter}
-          onChange={(e) => setDateAfter(e.target.value)}
+          value={inputDateAfter}
+          onChange={(e) => setInputDateAfter(e.target.value)}
         />
 
-        {/* Postcode filter */}
         <input
           type="text"
           placeholder="Postcode (e.g., BR1)"
-          value={postcode}
-          onChange={(e) => setPostcode(e.target.value)}
+          value={inputPostcode}
+          onChange={(e) => setInputPostcode(e.target.value)}
         />
+
+        <button onClick={applyFilters}>Search</button>
       </div>
 
       <hr />
 
-      {/* Render filtered properties */}
       {filteredProperties.length > 0 ? (
         filteredProperties.map((property) => (
           <div key={property.id}>
