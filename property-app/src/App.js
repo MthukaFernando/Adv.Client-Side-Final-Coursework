@@ -141,9 +141,8 @@ function App() {
       {filteredProperties.length > 0 ? (
         filteredProperties.map((property) => (
           <div key={property.id}>
-            <h2>{property.type}</h2>
-
             <img className="property-img" src={property.picture} alt={property.type}></img>
+            <h2>{property.type}</h2>
             <p>Price: {property.price}</p>
             <p>Bedrooms: {property.bedrooms}</p>
             <p>Location: {property.location}</p>
